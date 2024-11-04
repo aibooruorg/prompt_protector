@@ -4,6 +4,7 @@ import json
 import math
 import os
 import tempfile
+from typing import Optional
 import uuid
 import zipfile
 import gzip
@@ -24,7 +25,7 @@ def index():
     return render_template("index.html")
 
 
-def read_info_from_image_stealth(image: PIL.Image) -> str:
+def read_info_from_image_stealth(image: PIL.Image.Image) -> str:
     if "parameters" in image.text:
         return image.text["parameters"]
 
@@ -133,8 +134,7 @@ def read_info_from_image_stealth(image: PIL.Image) -> str:
     return decoded_data
 
 
-def add_stealth_pnginfo(image: PIL.Image) -> PIL.Image:
-
+def add_stealth_pnginfo(image: PIL.Image.Image) -> Optional[PIL.Image.Image]:
     width, height = image.size
     image.putalpha(255)
     pixels = image.load()
@@ -195,7 +195,7 @@ def download_file(url, file_path):
 @app.route("/", methods=["POST"])
 def load():
     files = [file for file in request.files.getlist("files") if file]
-    urls_raw: str = request.form.get("urls")
+    urls_raw: str = request.form.get("urls", "")
 
     file_text_list = []
     with tempfile.TemporaryDirectory() as tmp_dir:

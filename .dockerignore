@@ -1,0 +1,6 @@
+.github
+.dockerignore
+.gitignore
+Dockerfile
+pyproject.toml
+venv
